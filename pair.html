@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TEDDY-XMD</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #00ff88;
+      background: black;
+    }
+
+    /* BACKGROUND IMAGE */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: url("https://res.cloudinary.com/dqxlb29uz/image/upload/v1782583438/bwm_uploads/media-1782583438533.jpg") no-repeat center center/cover;
+      filter: brightness(0.35);
+      z-index: 0;
+    }
+
+    /* MATRIX */
+    canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      opacity: 0.35;
+    }
+
+    /* CONTENT (NO BOX) */
+    .content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 500px;
+      padding: 20px;
+    }
+
+    h2 {
+      color: #00ff88;
+      text-shadow: 0 0 12px #00ff88;
+      margin-bottom: 10px;
+      font-size: 2rem;
+    }
+
+    p {
+      opacity: 0.8;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 90%;
+      max-width: 380px;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(0,255,120,0.4);
+      background: rgba(0,0,0,0.5);
+      color: #00ff88;
+      outline: none;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    button {
+      width: 90%;
+      max-width: 380px;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+
+      background: linear-gradient(90deg, #00ff88, #00c3ff);
+      color: black;
+      font-weight: bold;
+      text-transform: uppercase;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      transform: scale(1.03);
+    }
+
+    #result {
+      margin-top: 15px;
+      color: #00ff88;
+      word-break: break-word;
+    }
+
+    #copy {
+      margin-top: 10px;
+      cursor: pointer;
+      color: #00c3ff;
+    }
+  </style>
+</head>
+
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div class="content">
+  <h2>🔥 TEDDY-XMD</h2>
+  <p>Enter your number with country code</p>
+
+  <input type="number" id="number" placeholder="e.g. 2557XXX" />
+  <br />
+  <button onclick="getCode()">Get Code</button>
+
+  <div id="result"></div>
+  <div id="copy" onclick="copyCode()"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+  async function getCode() {
+    const input = document.getElementById('number');
+    const output = document.getElementById('result');
+    const copyBtn = document.getElementById('copy');
+
+    const num = input.value.replace(/\D/g, '');
+
+    if (num.length < 11) {
+      output.innerHTML = 'Invalid number';
+      return;
+    }
+
+    output.innerHTML = 'Please wait...';
+
+    try {
+      const { data } = await axios(`code?number=${num}`);
+      const code = data.code || 'Unavailable';
+
+      output.innerHTML = `Code: ${code}`;
+      copyBtn.innerHTML = 'Click to Copy';
+      copyBtn.dataset.copy = code;
+
+    } catch (err) {
+      output.innerHTML = 'Error fetching code';
+    }
+  }
+
+  function copyCode() {
+    const copyBtn = document.getElementById('copy');
+    const text = copyBtn.dataset.copy;
+
+    if (text) {
+      navigator.clipboard.writeText(text);
+      copyBtn.innerHTML = 'Copied!';
+      setTimeout(() => copyBtn.innerHTML = 'Click to Copy', 1500);
+    }
+  }
+
+  /* MATRIX */
+  const canvas = document.getElementById("matrix");
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const letters = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&*";
+  const fontSize = 14;
+  const columns = canvas.width / fontSize;
+
+  const drops = Array.from({ length: columns }).fill(1);
+
+  function draw() {
+    ctx.fillStyle = "rgba(0,0,0,0.08)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#00ff88";
+    ctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+      const text = letters[Math.floor(Math.random() * letters.length)];
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        drops[i] = 0;
+      }
+
+      drops[i]++;
+    }
+  }
+
+  setInterval(draw, 35);
+</script>
+
+</body>
+</html>
