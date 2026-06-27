@@ -1,14 +1,14 @@
 {
     "name": "ARYAN-X-pair",
     "version": "1.0.0",
-    "description": "ARYAN-TECH Session Generator",
+    "description": "Teddy-xmd Session Generator",
     "main": "index.js",
     "scripts": {
       "start": "node index.js",
       "pm2": "pm2 start index.js --name aryan-Session --attach"
     },
     "dependencies": {
-      "@whiskeysockets/baileys": "github:https://github.com/aryankingkilalu/ARYAN-TECH",
+      "@whiskeysockets/baileys": "github:HansTz/HansTech",
       "@adiwajshing/keyed-db": "^0.2.4",
       "qrcode": "^1.5.3",
       "awesome-phonenumber": "^2.64.0",
