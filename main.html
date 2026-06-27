@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ARYAN-X</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      color: #00ff88;
+      background: black;
+    }
+
+    /* BACKGROUND IMAGE */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: url("https://res.cloudinary.com/dqxlb29uz/image/upload/v1782583438/bwm_uploads/media-1782583438533.jpg") center/cover no-repeat;
+      filter: brightness(0.35) contrast(1.1);
+      z-index: 0;
+    }
+
+    /* MATRIX */
+    canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      opacity: 0.25;
+    }
+
+    h3 {
+      position: relative;
+      z-index: 2;
+      font-size: 2rem;
+      text-shadow: 0 0 12px #00ff88;
+      margin-bottom: 10px;
+    }
+
+    /* VISITORS */
+    .visitors {
+      position: relative;
+      z-index: 2;
+      margin-bottom: 15px;
+      font-size: 14px;
+      color: #00ff88;
+      text-shadow: 0 0 8px #00ff88;
+    }
+
+    .button-container {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .button {
+      padding: 12px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      color: #00ff88;
+      border: 1px solid rgba(0,255,120,0.4);
+      background: rgba(0,0,0,0.6);
+      cursor: pointer;
+      transition: 0.3s;
+      display: inline-block;
+    }
+
+    .button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #00ff88;
+      color: white;
+    }
+
+    p {
+      margin-top: 10px;
+      font-size: 13px;
+      opacity: 0.8;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 10px;
+      width: 100%;
+      font-size: 13px;
+      color: #00ff88;
+      text-shadow: 0 0 8px #00ff88;
+      z-index: 2;
+    }
+
+    /* AD POPUP */
+    .popup {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .popup-box {
+      background: rgba(0,0,0,0.95);
+      border: 1px solid #00ff88;
+      padding: 25px;
+      border-radius: 14px;
+      text-align: center;
+      width: 90%;
+      max-width: 340px;
+      box-shadow: 0 0 25px #00ff88;
+    }
+
+    .popup-box h2 {
+      margin-bottom: 10px;
+      color: #00ff88;
+    }
+
+    .popup-buttons {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .join {
+      flex: 1;
+      padding: 10px;
+      background: #00ff88;
+      color: black;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .later {
+      flex: 1;
+      padding: 10px;
+      background: transparent;
+      border: 1px solid #00ff88;
+      color: #00ff88;
+      cursor: pointer;
+    }
+
+    @media (max-width: 500px) {
+      h3 { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+<canvas id="matrix"></canvas>
+
+<h3>🔥 ARYAN-X</h3>
+
+<div class="visitors">
+  👥 Visitors Online: <span id="visitors">0</span>
+</div>
+
+<div class="button-container">
+
+  <a class="button" href="qr">QR CODE</a>
+  <a class="button" href="pair">PAIRING CODE</a>
+
+  <div class="button" onclick="openPopup('whatsapp')">WHATSAPP CHANNEL</div>
+  <div class="button" onclick="openPopup('telegram')">TELEGRAM CHANNEL</div>
+
+  <a class="button" href="https://https://github.com/aryankingkilalu/ARYAN-TECH/tree/main/Teddy" target="_blank">GITHUB</a>
+
+  <p>HAVE ANY CONTACT? CLICK BELOW</p>
+
+  <a class="button" href="https://wa.me/+255772336513" target="_blank">
+    CONTACT OWNER
+  </a>
+</div>
+
+<!-- POPUP -->
+<div class="popup" id="popup">
+  <div class="popup-box">
+    <h2>📢 JOIN CHANNEL</h2>
+    <p>Do you want to join now?</p>
+
+    <div class="popup-buttons">
+      <button class="join" onclick="joinNow()">Join Now</button>
+      <button class="later" onclick="closePopup()">Maybe Later</button>
+    </div>
+  </div>
+</div>
+
+<footer>ARYAN-X© <span id="year"></span></footer>
+
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
+
+/* POPUP LOGIC */
+let selected = "";
+
+function openPopup(type) {
+  selected = type;
+  document.getElementById("popup").style.display = "flex";
+}
+
+function closePopup() {
+  document.getElementById("popup").style.display = "none";
+}
+
+function joinNow() {
+  if (selected === "whatsapp") {
+    window.location.href = "https://whatsapp.com/channel/0029Vb6NveDBPzjPa4vIRt3n";
+  }
+
+  if (selected === "telegram") {
+    window.location.href = "https://t.me/free_net_zone1";
+  }
+}
+
+/* VISITORS COUNTER (FAKE LIVE STYLE) */
+let base = Math.floor(Math.random() * 60) + 20;
+
+function updateVisitors() {
+  let change = Math.floor(Math.random() * 5 - 2);
+  base = Math.max(10, base + change);
+  document.getElementById("visitors").textContent = base;
+}
+
+updateVisitors();
+setInterval(updateVisitors, 3000);
+
+/* MATRIX */
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const letters = "01TEDDYXMD#$%&*ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const fontSize = 14;
+const columns = canvas.width / fontSize;
+
+const drops = Array.from({ length: columns }).fill(1);
+
+function draw() {
+  ctx.fillStyle = "rgba(0,0,0,0.08)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  ctx.fillStyle = "#00ff88";
+  ctx.font = fontSize + "px monospace";
+
+  for (let i = 0; i < drops.length; i++) {
+    const text = letters[Math.floor(Math.random() * letters.length)];
+    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+      drops[i] = 0;
+    }
+    drops[i]++;
+  }
+}
+
+setInterval(draw, 35);
+
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+</script>
+
+</body>
+</html>
