@@ -1,0 +1,24 @@
+{
+    "name": "ARYAN-X-pair",
+    "version": "1.0.0",
+    "description": "Teddy-xmd Session Generator",
+    "main": "index.js",
+    "scripts": {
+      "start": "node index.js",
+      "pm2": "pm2 start index.js --name aryan-Session --attach"
+    },
+    "dependencies": {
+      "@whiskeysockets/baileys": "github:HansTz/HansTech",
+      "@adiwajshing/keyed-db": "^0.2.4",
+      "qrcode": "^1.5.3",
+      "awesome-phonenumber": "^2.64.0",
+      "pino": "^8.1.0",
+      "body-parser": "^1.20.1",
+      "express": "^4.18.1",
+      "path": "^0.12.7",
+      "megajs": "1.1.7",
+      "pm2": "^5.4.0",
+      "async-mutex": "0.4.1"
+    }
+  }
+  
