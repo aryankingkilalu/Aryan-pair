@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TEDDY-XMD QR SCANNER</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #00ff88;
+      background: black;
+    }
+
+    /* BACKGROUND IMAGE */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: url("https://res.cloudinary.com/dqxlb29uz/image/upload/v1782583438/bwm_uploads/media-1782583438533.jpg") center/cover no-repeat;
+      filter: brightness(0.35) contrast(1.1);
+      z-index: 0;
+    }
+
+    /* MATRIX */
+    canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      opacity: 0.25;
+    }
+
+    /* MAIN BOX */
+    #content {
+      position: relative;
+      z-index: 2;
+
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(10px);
+
+      border: 1px solid rgba(0,255,120,0.3);
+      border-radius: 18px;
+
+      padding: 2rem;
+      width: 90%;
+      max-width: 420px;
+
+      text-align: center;
+      box-shadow: 0 0 25px rgba(0,255,120,0.25);
+    }
+
+    #qr-image {
+      width: 100%;
+      max-width: 320px;
+      border-radius: 12px;
+      box-shadow: 0 0 18px rgba(0,255,120,0.6);
+      margin-bottom: 15px;
+    }
+
+    h2 {
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px #00ff88;
+    }
+
+    p {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin-bottom: 15px;
+    }
+
+    progress {
+      width: 100%;
+      height: 18px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    progress::-webkit-progress-bar {
+      background: #111;
+    }
+
+    progress::-webkit-progress-value {
+      background: linear-gradient(90deg, #00ff88, #00c3ff);
+    }
+
+    .reload-button {
+      margin-top: 15px;
+      width: 100%;
+      padding: 12px;
+
+      background: rgba(0,0,0,0.6);
+      border: 1px solid #00ff88;
+      color: #00ff88;
+
+      border-radius: 10px;
+      cursor: pointer;
+
+      transition: 0.3s;
+      box-shadow: 0 0 12px rgba(0,255,120,0.3);
+    }
+
+    .reload-button:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 20px #00ff88;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div id="content">
+  <img id="qr-image" src="server" alt="QR Code" onerror="this.alt='Failed to load QR'">
+
+  <h2>🔥 ARYAN-X QR</h2>
+  <p id="legend">Scan the QR Code with WhatsApp</p>
+
+  <progress id="progressBar" value="0" max="30"></progress>
+
+  <button class="reload-button" onclick="location.reload()">🔄 Reload QR</button>
+</div>
+
+<script>
+  /* TIMER */
+  let timeleft = 30;
+  const bar = document.getElementById('progressBar');
+  const label = document.getElementById('legend');
+
+  const timer = setInterval(() => {
+    timeleft--;
+
+    if (bar) bar.value = 30 - timeleft;
+
+    if (timeleft <= 0) {
+      clearInterval(timer);
+      if (bar) bar.remove();
+      if (label) label.textContent = "QR EXPIRED - Reload Required";
+    }
+  }, 1000);
+
+  /* MATRIX */
+  const canvas = document.getElementById("matrix");
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const letters = "01TEDDYXMD#$%&*ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const fontSize = 14;
+  const columns = canvas.width / fontSize;
+
+  const drops = Array.from({ length: columns }).fill(1);
+
+  function draw() {
+    ctx.fillStyle = "rgba(0,0,0,0.08)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    ctx.fillStyle = "#00ff88";
+    ctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+      const text = letters[Math.floor(Math.random() * letters.length)];
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        drops[i] = 0;
+      }
+      drops[i]++;
+    }
+  }
+
+  setInterval(draw, 35);
+
+  window.addEventListener("resize", () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+</script>
+
+</body>
+</html>
